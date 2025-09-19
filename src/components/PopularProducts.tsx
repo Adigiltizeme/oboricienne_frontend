@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { fetchPopularProducts, Product, formatPrice, getImageUrl } from '../lib/api';
+import { fetchPopularProductsTemp, isUsingTempData } from '../lib/temp-api';
 import { useCart } from '@/contexts/CartContext';
 import ProductCard from './ProductCard';
 
@@ -15,11 +16,26 @@ export default function PopularProducts() {
     useEffect(() => {
         const loadPopularProducts = async () => {
             try {
-                const data = await fetchPopularProducts();
+                // Essayer d'abord l'API réelle
+                if (!isUsingTempData()) {
+                    try {
+                        const data = await fetchPopularProducts();
+                        setProducts(data.products);
+                        console.log('✅ Produits populaires chargés depuis l\'API Railway');
+                        return;
+                    } catch (apiError) {
+                        console.warn('⚠️ API Railway échoué pour produits populaires, fallback vers données locales:', apiError);
+                    }
+                }
+
+                // Fallback vers les données temporaires
+                const data = await fetchPopularProductsTemp();
                 setProducts(data.products);
+                console.log('📦 Produits populaires chargés depuis le fallback local');
+
             } catch (err) {
                 setError('Erreur lors du chargement des produits populaires');
-                console.error(err);
+                console.error('❌ Erreur fatale produits populaires:', err);
             } finally {
                 setLoading(false);
             }
@@ -73,18 +89,23 @@ export default function PopularProducts() {
 
                 {/* Products Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {products.map((product) => (
-                        <ProductCard
-                            key={product.id}
-                            product={product}
-                            variant="featured"
-                        />
-                    ))}
+                    {products
+                        .filter((product) => product.isAvailable !== false)
+                        .map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                variant="featured"
+                            />
+                        ))}
                 </div>
 
                 {/* CTA Section */}
                 <div className="text-center mt-12">
-                    <button className="bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl">
+                    <button
+                        className="bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl"
+                        onClick={() => window.location.href = '/menu'}
+                    >
                         Voir tout le menu
                     </button>
                 </div>

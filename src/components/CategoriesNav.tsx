@@ -1,17 +1,28 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { fetchCategories, Category } from '../lib/api';
+import { fetchCategoriesTemp, isUsingTempData } from '../lib/temp-api';
 
 export default function CategoriesNav() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     // Icons pour chaque catégorie
     const categoryIcons: { [key: string]: string } = {
-        'smash-burgers': '🍔',
-        'classiques': '🇺🇸',
+        'burgers': '🍔',
+        'smash-burger': '🔥',
+        'sandwichs': '🥪',
         'tacos': '🌮',
+        'brasserie': '🍽️',
+        'salades': '🥗',
+        'menu-tenders': '🍗',
+        'duo': '👥',
+        // Anciens mappings pour compatibilité
+        'smash-burgers': '🔥',
+        'classiques': '🍔',
         'pizzas': '🍕',
         'boissons': '🥤',
         'desserts': '🍰'
@@ -20,10 +31,25 @@ export default function CategoriesNav() {
     useEffect(() => {
         const loadCategories = async () => {
             try {
-                const data = await fetchCategories();
+                // Essayer d'abord l'API réelle
+                if (!isUsingTempData()) {
+                    try {
+                        const data = await fetchCategories();
+                        setCategories(data.categories);
+                        console.log('✅ Catégories chargées depuis l\'API Railway');
+                        return;
+                    } catch (apiError) {
+                        console.warn('⚠️ API Railway échoué pour catégories, fallback vers données locales:', apiError);
+                    }
+                }
+
+                // Fallback vers les données temporaires
+                const data = await fetchCategoriesTemp();
                 setCategories(data.categories);
+                console.log('📦 Catégories chargées depuis le fallback local');
+
             } catch (err) {
-                console.error('Erreur chargement catégories:', err);
+                console.error('❌ Erreur fatale chargement catégories:', err);
             } finally {
                 setLoading(false);
             }
@@ -43,6 +69,9 @@ export default function CategoriesNav() {
             </section>
         );
     }
+
+    // Calculate total products count from all categories
+    const totalProductsCount = categories.reduce((sum, category) => sum + (category.productsCount || 0), 0);
 
     return (
         <section className="py-16 bg-gray-900 relative overflow-hidden">
@@ -77,6 +106,7 @@ export default function CategoriesNav() {
                             key={category.id}
                             className="group relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 hover:from-red-900 hover:to-red-800 transition-all duration-500 transform hover:-translate-y-2 hover:shadow-2xl cursor-pointer border border-gray-700 hover:border-red-500"
                             style={{ animationDelay: `${index * 0.1}s` }}
+                            onClick={() => router.push(`/menu/${category.slug}`)}
                         >
 
                             {/* Category Icon */}
@@ -121,11 +151,15 @@ export default function CategoriesNav() {
                 {/* Bottom CTA */}
                 <div className="text-center mt-12">
                     <div className="inline-flex items-center space-x-4 bg-gradient-to-r from-red-600 to-yellow-600 rounded-full p-2">
-                        <button className="bg-white text-gray-900 font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition-colors">
-                            Menu Complet
-                        </button>
+                        <a href="/menu">
+                            <button className="bg-white text-gray-900 font-bold py-3 px-6 rounded-full hover:bg-gray-100 transition-colors">
+
+                                Menu Complet
+
+                            </button>
+                        </a>
                         <span className="text-white font-medium pr-4">
-                            32 créations vous attendent
+                            {totalProductsCount} créations vous attendent
                         </span>
                     </div>
                 </div>

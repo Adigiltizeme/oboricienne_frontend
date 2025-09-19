@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { fetchProductsByCategory, Product, formatPrice, getImageUrl, Category } from '../../../lib/api';
+import { fetchProductsByCategoryTemp, isUsingTempData } from '../../../lib/temp-api';
 import Header from '../../../components/Header';
 import { getCategoryEmoji, getCategoryName } from '@/helpers/getCategoryEmoji';
 import { useCart } from '@/contexts/CartContext';
 import ProductCard from '@/components/ProductCard';
+import OrderingAlert from '@/components/OrderingAlert';
 
 export default function CategoryPage() {
     const params = useParams();
@@ -24,7 +26,9 @@ export default function CategoryPage() {
         const loadCategoryProducts = async () => {
             try {
                 setLoading(true);
-                const data = await fetchProductsByCategory(categorySlug);
+                const data = isUsingTempData()
+                    ? await fetchProductsByCategoryTemp(categorySlug)
+                    : await fetchProductsByCategory(categorySlug);
 
                 const enrichedProducts = data.products.map(product => ({
                     ...product,
@@ -35,7 +39,9 @@ export default function CategoryPage() {
                     }
                 }));
 
-                setProducts(enrichedProducts);
+                // Filtrer les produits disponibles seulement
+                const availableProducts = enrichedProducts.filter(product => product.isAvailable !== false);
+                setProducts(availableProducts);
                 setCategory(data.category);
             } catch (err) {
                 setError('Catégorie non trouvée');
@@ -88,9 +94,10 @@ export default function CategoryPage() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Header />
+            <OrderingAlert />
 
             {/* Hero Section Catégorie */}
-            <section className="pt-20 bg-gradient-to-br from-gray-900 to-red-900 text-white py-16">
+            <section className="pt-32 bg-gradient-to-br from-gray-900 to-red-900 text-white py-16">
                 <div className="max-w-7xl mx-auto px-6">
 
                     {/* Breadcrumb */}
@@ -167,6 +174,22 @@ export default function CategoryPage() {
                 </div>
             </section>
 
+            {/* Message de disponibilité */}
+            <section className="bg-blue-50 border-t border-blue-200">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                    <div className="flex items-center justify-center space-x-3 text-blue-800">
+                        <div className="text-blue-500">ℹ️</div>
+                        <div className="text-sm font-medium">
+                            Certains produits peuvent être temporairement indisponibles.
+                        </div>
+                        <div className="text-sm">
+                            Pour plus d'informations sur la disponibilité et les prix menus,
+                            <strong className="ml-1">appelez-nous ou visitez-nous au restaurant</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Grille des produits */}
             <section className="py-12">
                 <div className="max-w-7xl mx-auto px-6">
@@ -205,8 +228,9 @@ export default function CategoryPage() {
                         Découvrez nos autres univers
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                        {['smash-burgers', 'classiques', 'tacos', 'pizzas', 'boissons', 'desserts']
+                        {['burgers', 'smash-burger', 'sandwichs', 'tacos', 'brasserie', 'salades', 'menu-tenders', 'duo']
                             .filter(slug => slug !== categorySlug)
+                            .slice(0, 6) // Limiter à 6 pour l'affichage
                             .map((slug) => (
                                 <button
                                     key={slug}
@@ -214,8 +238,8 @@ export default function CategoryPage() {
                                     className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                                 >
                                     <div className="text-4xl mb-2">{getCategoryEmoji(slug)}</div>
-                                    <div className="font-medium text-gray-900 capitalize">
-                                        {slug.replace('-', ' ')}
+                                    <div className="font-medium text-gray-900 text-center text-sm">
+                                        {getCategoryName(slug)}
                                     </div>
                                 </button>
                             ))}
@@ -234,7 +258,7 @@ export default function CategoryPage() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-colors">
-                            Commander maintenant
+                            Commander maintenant <span className="text-yellow-400 font-bold ml-1">07 44 78 64 78</span>
                         </button>
                         <button
                             onClick={() => router.push('/menu')}

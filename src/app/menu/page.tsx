@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { fetchProducts, fetchCategories, Product, Category, formatPrice, getImageUrl } from '../../lib/api';
+import { fetchProductsTemp, fetchCategoriesTemp, isUsingTempData } from '../../lib/temp-api';
 import Header from '../../components/Header';
 import { getCategoryEmoji } from '@/helpers/getCategoryEmoji';
 import { useCart } from '@/contexts/CartContext';
 import ProductCard from '@/components/ProductCard';
+import OrderingAlert from '@/components/OrderingAlert';
 
 export default function MenuPage() {
     const [products, setProducts] = useState<Product[]>([]);
@@ -21,7 +23,7 @@ export default function MenuPage() {
     const [showVegetarian, setShowVegetarian] = useState(false);
     const [showVegan, setShowVegan] = useState(false);
     const [showSpicy, setShowSpicy] = useState(false);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 25]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 50]);
 
     const { addItem } = useCart();
 
@@ -30,8 +32,8 @@ export default function MenuPage() {
             try {
                 setLoading(true);
                 const [productsData, categoriesData] = await Promise.all([
-                    fetchProducts(),
-                    fetchCategories()
+                    isUsingTempData() ? fetchProductsTemp() : fetchProducts(),
+                    isUsingTempData() ? fetchCategoriesTemp() : fetchCategories()
                 ]);
                 setProducts(productsData.products);
                 setCategories(categoriesData.categories);
@@ -50,6 +52,9 @@ export default function MenuPage() {
     // Fonction de filtrage
     useEffect(() => {
         let filtered = [...products];
+
+        // Filtre par disponibilité (masquer les produits non disponibles)
+        filtered = filtered.filter(product => product.isAvailable !== false);
 
         // Filtre par catégorie
         if (selectedCategory !== 'all') {
@@ -134,9 +139,10 @@ export default function MenuPage() {
     return (
         <div className="min-h-screen bg-gray-50">
             <Header />
+            <OrderingAlert />
 
             {/* Hero Section Menu */}
-            <section className="pt-20 bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 text-white py-16">
+            <section className="pt-32 bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 text-white py-16">
                 <div className="max-w-7xl mx-auto px-6 text-center">
                     <h1 className="text-4xl md:text-6xl font-black mb-4">
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-yellow-400">
@@ -151,7 +157,7 @@ export default function MenuPage() {
                     {/* Stats rapides */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 max-w-2xl mx-auto">
                         <div className="text-center">
-                            <div className="text-2xl font-black text-yellow-400">{products.length}</div>
+                            <div className="text-2xl font-black text-yellow-400">{products.filter(p => p.isAvailable !== false).length}</div>
                             <div className="text-sm text-gray-300">Créations</div>
                         </div>
                         <div className="text-center">
@@ -159,11 +165,11 @@ export default function MenuPage() {
                             <div className="text-sm text-gray-300">Univers</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-black text-yellow-400">{products.filter(p => p.isVegetarian).length}</div>
+                            <div className="text-2xl font-black text-yellow-400">{products.filter(p => p.isVegetarian && p.isAvailable !== false).length}</div>
                             <div className="text-sm text-gray-300">Végé</div>
                         </div>
                         <div className="text-center">
-                            <div className="text-2xl font-black text-yellow-400">{products.filter(p => p.isPopular).length}</div>
+                            <div className="text-2xl font-black text-yellow-400">{products.filter(p => p.isPopular && p.isAvailable !== false).length}</div>
                             <div className="text-sm text-gray-300">Hits</div>
                         </div>
                     </div>
@@ -171,7 +177,7 @@ export default function MenuPage() {
             </section>
 
             {/* Filtres et Recherche */}
-            <section className="bg-white shadow-lg sticky top-20 z-40">
+            <section className="bg-white shadow-lg sticky top-20 z-30">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
 
                     {/* Barre de recherche - Mobile first */}
@@ -200,7 +206,7 @@ export default function MenuPage() {
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                             >
-                                Tout ({products.length})
+                                Tout ({products.filter(p => p.isAvailable !== false).length})
                             </button>
                             {categories.map((category) => (
                                 <button
@@ -211,7 +217,7 @@ export default function MenuPage() {
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
                                 >
-                                    {category.name} ({category.productsCount})
+                                    {category.name} ({products.filter(p => p.category.slug === category.slug && p.isAvailable !== false).length})
                                 </button>
                             ))}
                         </div>
@@ -291,6 +297,22 @@ export default function MenuPage() {
                 }`}
             </style>
 
+            {/* Message de disponibilité */}
+            <section className="bg-blue-50 border-t border-blue-200">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                    <div className="flex items-center justify-center space-x-3 text-blue-800">
+                        <div className="text-blue-500">ℹ️</div>
+                        <div className="text-sm font-medium">
+                            Certains produits peuvent être temporairement indisponibles.
+                        </div>
+                        <div className="text-sm">
+                            Pour plus d'informations sur la disponibilité et les prix menus,
+                            <strong className="ml-1">appelez-nous au 07 44 78 64 78 ou honorez-nous par votre visite</strong>.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Grille des produits */}
             <section className="py-12">
                 <div className="max-w-7xl mx-auto px-6">
@@ -336,11 +358,12 @@ export default function MenuPage() {
                         Notre équipe est là pour vous conseiller et personnaliser votre commande
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-colors">
+                        {/* <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-colors">
                             Nous contacter
-                        </button>
+                        </button> */}
                         <button className="border-2 border-white text-white hover:bg-white hover:text-gray-900 font-bold py-4 px-8 rounded-full text-lg transition-colors">
                             Commander par téléphone
+                            <span className="text-yellow-400 font-bold ml-1">07 44 78 64 78</span>
                         </button>
                     </div>
                 </div>

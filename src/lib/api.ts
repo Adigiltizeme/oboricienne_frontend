@@ -13,8 +13,8 @@ const getApiBaseUrl = () => {
         return 'https://VOTRE-BACKEND-NGROK-URL.ngrok.app/api';
     }
 
-    // Sinon, localhost en développement
-    return 'http://localhost:5000/api';
+    // En développement, utiliser le proxy Next.js pour éviter CORS
+    return '/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -30,14 +30,23 @@ export interface ApiResponse<T> {
     data?: T;
 }
 
+export interface ProductVariant {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    imageUrl: string | null;
+    isDefault?: boolean;
+}
+
 export interface Product {
     id: string;
     name: string;
     slug: string;
     description: string;
     shortDescription: string | null;
-    price: number;
-    imageUrl: string | null;
+    price: number; // Prix de base (variante par défaut)
+    imageUrl: string | null; // Image par défaut
     imageAlt: string | null;
     isPopular: boolean;
     isSpicy: boolean;
@@ -50,6 +59,9 @@ export interface Product {
         slug: string;
     };
     customizations: Customization[];
+    variants?: ProductVariant[]; // Variantes optionnelles (seul, menu, etc.)
+    isAvailable?: boolean; // Disponibilité du produit (prix connus)
+    isPromo?: boolean; // Indique si le produit est en promotion
 }
 
 export interface Customization {
@@ -292,8 +304,22 @@ export const getImageUrl = (imageUrl: string | null, productName?: string): stri
         return imageUrl;
     }
 
-    // Sinon, construire l'URL complète
-    return imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+    // Pour les images locales, s'assurer qu'elles commencent par /
+    let cleanUrl = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
+
+    // Encoder les espaces et caractères spéciaux dans l'URL
+    // Séparer le chemin en segments et encoder chaque segment individuellement
+    const pathParts = cleanUrl.split('/');
+    const encodedParts = pathParts.map(part =>
+        part === '' ? '' : encodeURIComponent(part)
+    );
+    const encodedUrl = encodedParts.join('/');
+
+    // Debug: log des URLs d'images pour vérification
+    console.log('🖼️ Image URL original:', cleanUrl);
+    console.log('🖼️ Image URL encodée:', encodedUrl);
+
+    return encodedUrl;
 };
 
 // Fonction pour obtenir l'emoji correspondant au produit

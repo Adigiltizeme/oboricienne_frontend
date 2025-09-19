@@ -2,6 +2,10 @@ import Header from '../components/Header';
 import HeroSection from '../components/HeroSection';
 import PopularProducts from '../components/PopularProducts';
 import CategoriesNav from '../components/CategoriesNav';
+import LocationMap from '../components/LocationMap';
+import OrderingAlert from '../components/OrderingAlert';
+
+import { categories, products } from '../data/products';
 
 export default function HomePage() {
   return (
@@ -9,6 +13,9 @@ export default function HomePage() {
 
       {/* Navigation Header */}
       <Header />
+
+      {/* Ordering Alert */}
+      <OrderingAlert />
 
       {/* Hero Section */}
       <HeroSection />
@@ -108,7 +115,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-black text-yellow-400 mb-2">32</div>
+              <div className="text-4xl font-black text-yellow-400 mb-2">{products.length}</div>
               <div className="text-gray-300">Créations Menu</div>
             </div>
             <div>
@@ -116,7 +123,7 @@ export default function HomePage() {
               <div className="text-gray-300">Min. Préparation</div>
             </div>
             <div>
-              <div className="text-4xl font-black text-yellow-400 mb-2">6</div>
+              <div className="text-4xl font-black text-yellow-400 mb-2">{categories.length}</div>
               <div className="text-gray-300">Univers Culinaires</div>
             </div>
             <div>
@@ -144,14 +151,8 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
-            {/* Map placeholder */}
-            <div className="bg-gray-200 rounded-2xl h-96 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-6xl mb-4">📍</div>
-                <div className="text-xl font-bold text-gray-700">Zone Industrielle Évreux</div>
-                <div className="text-gray-600">Près du CFA</div>
-              </div>
-            </div>
+            {/* Interactive Map */}
+            <LocationMap />
 
             {/* Contact Info */}
             <div className="space-y-8">
@@ -161,21 +162,21 @@ export default function HomePage() {
                   <div className="flex items-center space-x-4">
                     <div className="text-red-600 text-xl">📍</div>
                     <div>
-                      <div className="font-semibold">Zone Industrielle</div>
-                      <div className="text-gray-600">Près du CFA, 27000 Évreux</div>
+                      <div className="font-semibold">O'BORICIENNE BURGER</div>
+                      <div className="text-gray-600">967 Rue Jacquard<br />27000 Évreux</div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-red-600 text-xl">📞</div>
                     <div>
-                      <div className="font-semibold">02 32 XX XX XX</div>
+                      <div className="font-semibold">+337 44 78 64 78</div>
                       <div className="text-gray-600">Commandes & Informations</div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-red-600 text-xl">⏰</div>
                     <div>
-                      <div className="font-semibold">7h - 21h30</div>
+                      <div className="font-semibold">11h-14h - 18h-22h00</div>
                       <div className="text-gray-600">7 jours sur 7</div>
                     </div>
                   </div>
@@ -200,9 +201,9 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <button className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl">
+              {/* <button className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl">
                 Commander Maintenant
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -244,7 +245,7 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-bold mb-4">Navigation</h4>
               <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-yellow-400 transition-colors">Menu Complet</a></li>
+                <li><a href="/menu" className="hover:text-yellow-400 transition-colors">Menu Complet</a></li>
                 <li><a href="#" className="hover:text-yellow-400 transition-colors">Nos Hits</a></li>
                 <li><a href="#" className="hover:text-yellow-400 transition-colors">Notre Histoire</a></li>
                 <li><a href="#" className="hover:text-yellow-400 transition-colors">Contact</a></li>
@@ -255,9 +256,9 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-bold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-300 text-sm">
-                <li>Zone Industrielle Évreux</li>
-                <li>Près du CFA</li>
-                <li>02 32 XX XX XX</li>
+                <li>Zone Industrielle près du Bâtiment CFA</li>
+                <li>967 Rue Jacquard</li>
+                <li>27000 Évreux</li>
                 <li>contact@oboricienne-burger.fr</li>
               </ul>
             </div>

@@ -1,0 +1,23 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Burgers",
+      "slug": "burgers",
+      "description": "Nos burgers classiques avec pain brioché",
+      "imageUrl": "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/categories/burgers.jpg",
+      "displayOrder": 1,
+      "productsCount": 11
+    },
+    {
+      "id": "2",
+      "name": "Smash Burger",
+      "slug": "smash-burger",
+      "description": "L'art du smash burger à la plancha",
+      "imageUrl": "https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/categories/smash-burger.jpg",
+      "displayOrder": 2,
+      "productsCount": 3
+    }
+  ],
+  "note": "Fichier à importer dans Railway - remplacez YOUR_CLOUD_NAME par votre nom Cloudinary"
+}

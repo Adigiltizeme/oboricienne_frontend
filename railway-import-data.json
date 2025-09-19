@@ -1,0 +1,78 @@
+{
+  "info": {
+    "generated": "2025-09-19T20:51:07.439Z",
+    "note": "Données de base - ajoutez plus de produits selon vos besoins"
+  },
+  "categories": [
+    {
+      "id": "1",
+      "name": "Burgers",
+      "slug": "burgers",
+      "description": "Nos burgers classiques avec pain brioché",
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314848/oboricienne/products/burgers/big-obb-seul.png",
+      "displayOrder": 1,
+      "productsCount": 11
+    },
+    {
+      "id": "2",
+      "name": "Smash Burger",
+      "slug": "smash-burger",
+      "description": "L'art du smash burger à la plancha",
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314911/oboricienne/products/smash%20burger/BUFF-OBB-seul.png",
+      "displayOrder": 2,
+      "productsCount": 3
+    },
+    {
+      "id": "3",
+      "name": "Sandwichs",
+      "slug": "sandwichs",
+      "description": "Sandwichs gourmands",
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314890/oboricienne/products/sandwichs/classic-obb-seul.png",
+      "displayOrder": 3,
+      "productsCount": 10
+    },
+    {
+      "id": "4",
+      "name": "Tacos",
+      "slug": "tacos",
+      "description": "Tacos à la française",
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314925/oboricienne/products/tacos/tacos-2-viandes-seul.png",
+      "displayOrder": 4,
+      "productsCount": 6
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "180 OBB",
+      "slug": "180-obb",
+      "description": "Notre burger signature avec steak haché 180g, fromage, salade, tomate, oignons rouges",
+      "shortDescription": "Steak 180g, fromage, crudités",
+      "price": 8.5,
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314845/oboricienne/products/burgers/180-obb-seul.png",
+      "imageAlt": "180 OBB burger",
+      "isPopular": true,
+      "isSpicy": false,
+      "isVegetarian": false,
+      "isVegan": false,
+      "preparationTime": 12,
+      "categoryId": "1"
+    },
+    {
+      "id": "2",
+      "name": "Big OBB",
+      "slug": "big-obb",
+      "description": "Double steak, double fromage, salade, tomate",
+      "shortDescription": "Double steak, double fromage",
+      "price": 10.5,
+      "imageUrl": "https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314848/oboricienne/products/burgers/big-obb-seul.png",
+      "imageAlt": "Big OBB burger",
+      "isPopular": true,
+      "isSpicy": false,
+      "isVegetarian": false,
+      "isVegan": false,
+      "preparationTime": 15,
+      "categoryId": "1"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { products } from '@/data/products';
 
 export default function HeroSection() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,13 +21,13 @@ export default function HeroSection() {
             cta: "Nos Smash",
             background: "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700"
         },
-        {
-            title: "Zone CFA",
-            subtitle: "Livraison rapide",
-            description: "Commandez en ligne, récupérez en 15 minutes près du CFA d'Évreux",
-            cta: "Commander",
-            background: "bg-gradient-to-br from-yellow-700 via-yellow-600 to-yellow-500"
-        }
+        // {
+        //     title: "Zone CFA",
+        //     subtitle: "Livraison rapide",
+        //     description: "Commandez en ligne, récupérez en 15 minutes près du CFA Bâtiment d'Évreux",
+        //     cta: "Commander",
+        //     background: "bg-gradient-to-br from-yellow-700 via-yellow-600 to-yellow-500"
+        // }
     ];
 
     useEffect(() => {
@@ -37,7 +38,7 @@ export default function HeroSection() {
     }, [heroSlides.length]);
 
     return (
-        <section className="relative h-screen overflow-hidden">
+        <section className="relative h-screen overflow-hidden pt-20">
             {/* Background avec animation */}
             <div className={`absolute inset-0 transition-all duration-1000 ${heroSlides[currentSlide].background}`}>
                 {/* Graffiti pattern overlay */}
@@ -102,7 +103,7 @@ export default function HeroSection() {
                     {/* Stats bar */}
                     <div className="mt-12 mb-6 grid grid-cols-3 gap-8 max-w-2xl mx-auto">
                         <div className="text-center">
-                            <div className="text-3xl font-black text-yellow-400">32</div>
+                            <div className="text-3xl font-black text-yellow-400">{products.length}</div>
                             <div className="text-sm text-gray-300">Créations</div>
                         </div>
                         <div className="text-center">

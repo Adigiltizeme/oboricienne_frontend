@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { fetchProducts, fetchCategories, fetchPopularProducts, testApiConnection, Product, Category, formatPrice } from '../lib/api';
+import { fetchProductsTemp, fetchCategoriesTemp, fetchPopularProductsTemp, isUsingTempData } from '../lib/temp-api';
 
 export default function ApiTest() {
     const [isConnected, setIsConnected] = useState<boolean | null>(null);
@@ -16,34 +17,59 @@ export default function ApiTest() {
             try {
                 setLoading(true);
 
-                // Test de connexion
-                console.log('🔄 Test de connexion API...');
-                const connected = await testApiConnection();
-                setIsConnected(connected);
+                if (isUsingTempData()) {
+                    // Mode données temporaires
+                    console.log('🔄 Utilisation des données temporaires...');
+                    setIsConnected(true);
 
-                if (!connected) {
-                    throw new Error('Impossible de se connecter à l\'API');
+                    // Récupérer les catégories (données temporaires)
+                    console.log('🔄 Récupération des catégories (données locales)...');
+                    const categoriesData = await fetchCategoriesTemp();
+                    setCategories(categoriesData.categories);
+                    console.log(`✅ ${categoriesData.categories.length} catégories récupérées`);
+
+                    // Récupérer tous les produits (données temporaires)
+                    console.log('🔄 Récupération des produits (données locales)...');
+                    const productsData = await fetchProductsTemp();
+                    setProducts(productsData.products);
+                    console.log(`✅ ${productsData.products.length} produits récupérés`);
+
+                    // Récupérer les produits populaires (données temporaires)
+                    console.log('🔄 Récupération des produits populaires (données locales)...');
+                    const popularData = await fetchPopularProductsTemp();
+                    setPopularProducts(popularData.products);
+                    console.log(`✅ ${popularData.products.length} produits populaires récupérés`);
+
+                } else {
+                    // Mode API normal
+                    console.log('🔄 Test de connexion API...');
+                    const connected = await testApiConnection();
+                    setIsConnected(connected);
+
+                    if (!connected) {
+                        throw new Error('Impossible de se connecter à l\'API');
+                    }
+
+                    console.log('✅ Connexion API réussie');
+
+                    // Récupérer les catégories
+                    console.log('🔄 Récupération des catégories...');
+                    const categoriesData = await fetchCategories();
+                    setCategories(categoriesData.categories);
+                    console.log(`✅ ${categoriesData.categories.length} catégories récupérées`);
+
+                    // Récupérer tous les produits
+                    console.log('🔄 Récupération des produits...');
+                    const productsData = await fetchProducts();
+                    setProducts(productsData.products);
+                    console.log(`✅ ${productsData.products.length} produits récupérés`);
+
+                    // Récupérer les produits populaires
+                    console.log('🔄 Récupération des produits populaires...');
+                    const popularData = await fetchPopularProducts();
+                    setPopularProducts(popularData.products);
+                    console.log(`✅ ${popularData.products.length} produits populaires récupérés`);
                 }
-
-                console.log('✅ Connexion API réussie');
-
-                // Récupérer les catégories
-                console.log('🔄 Récupération des catégories...');
-                const categoriesData = await fetchCategories();
-                setCategories(categoriesData.categories);
-                console.log(`✅ ${categoriesData.categories.length} catégories récupérées`);
-
-                // Récupérer tous les produits
-                console.log('🔄 Récupération des produits...');
-                const productsData = await fetchProducts();
-                setProducts(productsData.products);
-                console.log(`✅ ${productsData.products.length} produits récupérés`);
-
-                // Récupérer les produits populaires
-                console.log('🔄 Récupération des produits populaires...');
-                const popularData = await fetchPopularProducts();
-                setPopularProducts(popularData.products);
-                console.log(`✅ ${popularData.products.length} produits populaires récupérés`);
 
             } catch (err) {
                 console.error('❌ Erreur:', err);
@@ -83,9 +109,27 @@ export default function ApiTest() {
         <div className="p-8 space-y-8">
 
             {/* Status de connexion */}
-            <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                <h2 className="text-xl font-bold text-green-800 mb-2">✅ API O'Boricienne Connectée</h2>
-                <p className="text-green-600">Backend opérationnel sur http://localhost:5000</p>
+            <div className={`border rounded-lg p-6 ${isUsingTempData()
+                ? 'bg-blue-50 border-blue-200'
+                : 'bg-green-50 border-green-200'
+            }`}>
+                <h2 className={`text-xl font-bold mb-2 ${isUsingTempData()
+                    ? 'text-blue-800'
+                    : 'text-green-800'
+                }`}>
+                    {isUsingTempData() ? '🔄 Mode Développement (Données Locales)' : '✅ API O\'Boricienne Connectée'}
+                </h2>
+                <p className={isUsingTempData() ? 'text-blue-600' : 'text-green-600'}>
+                    {isUsingTempData()
+                        ? 'Utilisation des données temporaires (vraies images et produits)'
+                        : 'Backend opérationnel sur http://localhost:5000'
+                    }
+                </p>
+                {isUsingTempData() && (
+                    <p className="text-blue-500 text-sm mt-2">
+                        💡 Pour utiliser l'API backend, définir TEMP_MODE_ENABLED = false dans temp-api.ts
+                    </p>
+                )}
             </div>
 
             {/* Statistiques */}

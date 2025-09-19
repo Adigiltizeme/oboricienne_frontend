@@ -3,10 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../contexts/CartContext';
 import UserMenu from './UserMenu';
+import { fetchCategoriesTemp, fetchProductsTemp, isUsingTempData } from '../lib/temp-api';
+import { fetchCategories, fetchProducts, Category } from '../lib/api';
+import { getCategoryEmoji } from '../helpers/getCategoryEmoji';
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [totalProducts, setTotalProducts] = useState(0);
 
     const { state, toggleCart } = useCart();
 
@@ -17,6 +22,43 @@ export default function Header() {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Charger les données pour le menu déroulant
+    useEffect(() => {
+        const loadMenuData = async () => {
+            try {
+                // Essayer d'abord l'API réelle
+                if (!isUsingTempData()) {
+                    try {
+                        const [categoriesData, productsData] = await Promise.all([
+                            fetchCategories(),
+                            fetchProducts()
+                        ]);
+                        setCategories(categoriesData.categories);
+                        setTotalProducts(productsData.products.length);
+                        console.log('✅ Données chargées depuis l\'API Railway');
+                        return;
+                    } catch (apiError) {
+                        console.warn('⚠️ API Railway échoué, fallback vers données locales:', apiError);
+                    }
+                }
+
+                // Fallback vers les données temporaires
+                const [categoriesData, productsData] = await Promise.all([
+                    fetchCategoriesTemp(),
+                    fetchProductsTemp()
+                ]);
+                setCategories(categoriesData.categories);
+                setTotalProducts(productsData.products.length);
+                console.log('📦 Données chargées depuis le fallback local');
+
+            } catch (err) {
+                console.error('❌ Erreur fatale chargement menu Header:', err);
+            }
+        };
+
+        loadMenuData();
     }, []);
 
     const navigation = [
@@ -86,7 +128,7 @@ export default function Header() {
                                         <span className="text-2xl">🍽️</span>
                                         <div>
                                             <div className="font-bold">Menu complet</div>
-                                            <div className="text-sm text-gray-500">Toutes nos créations (32)</div>
+                                            <div className="text-sm text-gray-500">Toutes nos créations ({totalProducts})</div>
                                         </div>
                                         <svg className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -100,59 +142,20 @@ export default function Header() {
                                     <div className="space-y-1">
                                         <div className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3 px-4">Par catégorie</div>
 
-                                        <a href="/menu/smash-burgers" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🍔</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Smash Burgers</div>
-                                                <div className="text-xs text-gray-500">L'âme de la rue en un burger</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">4</span>
-                                        </a>
-
-                                        <a href="/menu/classiques" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🇺🇸</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Classiques</div>
-                                                <div className="text-xs text-gray-500">L'esprit du diner américain</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">5</span>
-                                        </a>
-
-                                        <a href="/menu/pizzas" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🍕</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Pizzas</div>
-                                                <div className="text-xs text-gray-500">L'Italie à la conquête de la rue</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">6</span>
-                                        </a>
-
-                                        <a href="/menu/tacos" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🌮</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Tacos</div>
-                                                <div className="text-xs text-gray-500">L'aventure mexicaine</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">3</span>
-                                        </a>
-
-                                        <a href="/menu/boissons" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🥤</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Boissons</div>
-                                                <div className="text-xs text-gray-500">Pour étancher toutes les soifs</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">9</span>
-                                        </a>
-
-                                        <a href="/menu/desserts" className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group">
-                                            <span className="text-xl">🍰</span>
-                                            <div className="flex-1">
-                                                <div className="font-medium">Desserts</div>
-                                                <div className="text-xs text-gray-500">La touche finale, sucrée</div>
-                                            </div>
-                                            <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">5</span>
-                                        </a>
+                                        {categories.map((category) => (
+                                            <a
+                                                key={category.id}
+                                                href={`/menu/${category.slug}`}
+                                                className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group"
+                                            >
+                                                <span className="text-xl">{getCategoryEmoji(category.slug)}</span>
+                                                <div className="flex-1">
+                                                    <div className="font-medium">{category.name}</div>
+                                                    <div className="text-xs text-gray-500">{category.description}</div>
+                                                </div>
+                                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">{category.productsCount}</span>
+                                            </a>
+                                        ))}
                                     </div>
 
                                     {/* CTA */}
@@ -177,7 +180,7 @@ export default function Header() {
                             href="#histoire"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
                         >
-                            Histoire
+                            Histoire (Bientôt disponible)
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>
                         </a>
 
@@ -185,7 +188,7 @@ export default function Header() {
                             href="#contact"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
                         >
-                            Contact
+                            Contact (Bientôt disponible)
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>
                         </a>
                     </div>
@@ -193,7 +196,7 @@ export default function Header() {
                     {/* Desktop CTA avec panier et authentification */}
                     <div className="hidden md:flex items-center space-x-4">
                         {/* Bouton panier */}
-                        <button
+                        {/* <button
                             onClick={toggleCart}
                             className="relative text-white hover:text-yellow-400 transition-colors"
                         >
@@ -205,17 +208,17 @@ export default function Header() {
                                     {state.totalItems}
                                 </span>
                             )}
-                        </button>
+                        </button> */}
 
                         {/* Menu utilisateur */}
-                        <UserMenu />
+                        {/* <UserMenu />
 
                         <a
                             href="/menu"
                             className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
                         >
                             Commander
-                        </a>
+                        </a> */}
                     </div>
 
                     {/* Mobile menu button */}
@@ -257,12 +260,12 @@ export default function Header() {
                                 ))}
                                 <div className="px-3 py-2 space-y-3">
                                     {/* Menu utilisateur mobile */}
-                                    <div className="flex justify-center">
+                                    {/* <div className="flex justify-center">
                                         <UserMenu />
-                                    </div>
+                                    </div> */}
 
                                     {/* Bouton panier mobile */}
-                                    <button
+                                    {/* <button
                                         onClick={() => {
                                             toggleCart();
                                             setIsMobileMenuOpen(false);
@@ -273,16 +276,16 @@ export default function Header() {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L5 3H3m4 10l1 2m0 0h10m-10 0a2 2 0 002 2m-8 0a2 2 0 002 2" />
                                         </svg>
                                         <span>Panier ({state.totalItems})</span>
-                                    </button>
+                                    </button> */}
 
                                     {/* Bouton commander */}
-                                    <a
+                                    {/* <a
                                         href="/menu"
                                         className="block w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition-colors text-center"
                                         onClick={() => setIsMobileMenuOpen(false)}
                                     >
                                         Commander
-                                    </a>
+                                    </a> */}
                                 </div>
                             </div>
                         </div>
