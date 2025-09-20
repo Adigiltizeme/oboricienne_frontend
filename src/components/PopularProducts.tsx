@@ -7,6 +7,8 @@ import ProductCard from './ProductCard';
 
 export default function PopularProducts() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [allProducts, setAllProducts] = useState<Product[]>([]);
+    const [showAll, setShowAll] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -17,7 +19,8 @@ export default function PopularProducts() {
             try {
                 console.log('🔄 Chargement des produits populaires depuis Railway...');
                 const data = await fetchPopularProducts();
-                setProducts(data.products);
+                setAllProducts(data.products);
+                setProducts(data.products.slice(0, 8)); // Afficher les 8 premiers
                 console.log('✅ Produits populaires chargés depuis Railway:', data.products.length, 'produits');
                 console.log('📋 Produits populaires:', data.products.map(p => p.name));
             } catch (err) {
@@ -30,6 +33,16 @@ export default function PopularProducts() {
 
         loadPopularProducts();
     }, []);
+
+    const handleShowMore = () => {
+        setShowAll(true);
+        setProducts(allProducts);
+    };
+
+    const handleShowLess = () => {
+        setShowAll(false);
+        setProducts(allProducts.slice(0, 8));
+    };
 
     if (loading) {
         return (
@@ -86,6 +99,26 @@ export default function PopularProducts() {
                             />
                         ))}
                 </div>
+
+                {/* Show More/Less Button */}
+                {allProducts.length > 8 && (
+                    <div className="text-center mt-8">
+                        <button
+                            onClick={showAll ? handleShowLess : handleShowMore}
+                            className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg transition-all duration-300 border border-gray-300"
+                        >
+                            {showAll ? (
+                                <>
+                                    Voir moins ({allProducts.length - 8} de moins)
+                                </>
+                            ) : (
+                                <>
+                                    Voir plus ({allProducts.length - 8} autres hits)
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
 
                 {/* CTA Section */}
                 <div className="text-center mt-12">
