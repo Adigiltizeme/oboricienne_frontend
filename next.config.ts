@@ -7,14 +7,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://oboriciennebackend-production.up.railway.app/api/:path*',
-      },
-    ];
-  },
+  // Rewrites removed - using direct API calls in production
 };
 
 export default nextConfig;

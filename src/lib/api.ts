@@ -2,23 +2,26 @@
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const getApiBaseUrl = () => {
-    // En production/déploiement, utiliser directement Railway
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'production') {
+    // Détecter si on est sur Vercel (production)
+    if (typeof window !== 'undefined' && (
+        window.location.hostname.includes('vercel.app') ||
+        window.location.hostname.includes('oboricienne') ||
+        !window.location.hostname.includes('localhost')
+    )) {
         return 'https://oboriciennebackend-production.up.railway.app/api';
     }
 
-    // En production/déploiement, utiliser la variable d'environnement
-    if (process.env.NEXT_PUBLIC_API_URL) {
+    // En développement local, utiliser la variable d'environnement
+    if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes('localhost')) {
         return process.env.NEXT_PUBLIC_API_URL;
     }
 
     // Détecter si on est sur ngrok (pour tests mobiles)
     if (typeof window !== 'undefined' && window.location.hostname.includes('ngrok')) {
-        // REMPLACEZ cette URL par celle de votre backend ngrok
         return 'https://VOTRE-BACKEND-NGROK-URL.ngrok.app/api';
     }
 
-    // En développement, utiliser le proxy Next.js pour éviter CORS
+    // En développement local, utiliser le proxy Next.js
     return '/api';
 };
 
