@@ -181,8 +181,8 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                             </span>
                         </div>
 
-                        {/* Personnalisations disponibles */}
-                        {hasCustomizations && (
+                        {/* Personnalisations disponibles - TEMPORAIREMENT DÉSACTIVÉ */}
+                        {/* {hasCustomizations && (
                             <div className="mb-4">
                                 <div className="text-xs text-gray-500 mb-1">
                                     ⚙️ {product.customizations.length} personnalisation(s) disponible(s)
@@ -192,7 +192,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                                     {product.customizations.length > 2 && '...'}
                                 </div>
                             </div>
-                        )}
+                        )} */}
 
                         {/* Sélection des variantes */}
                         {hasVariants && product.variants && (
