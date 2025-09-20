@@ -16,22 +16,20 @@ export default function PopularProducts() {
     useEffect(() => {
         const loadPopularProducts = async () => {
             try {
-                // Essayer d'abord l'API réelle
-                if (!isUsingTempData()) {
-                    try {
-                        const data = await fetchPopularProducts();
-                        setProducts(data.products);
-                        console.log('✅ Produits populaires chargés depuis l\'API Railway');
-                        return;
-                    } catch (apiError) {
-                        console.warn('⚠️ API Railway échoué pour produits populaires, fallback vers données locales:', apiError);
-                    }
-                }
+                // En production, toujours utiliser l'API Railway
+                try {
+                    const data = await fetchPopularProducts();
+                    setProducts(data.products);
+                    console.log('✅ Produits populaires chargés depuis l\'API Railway');
+                    return;
+                } catch (apiError) {
+                    console.warn('⚠️ API Railway échoué pour produits populaires, fallback vers données locales:', apiError);
 
-                // Fallback vers les données temporaires
-                const data = await fetchPopularProductsTemp();
-                setProducts(data.products);
-                console.log('📦 Produits populaires chargés depuis le fallback local');
+                    // Fallback vers les données temporaires seulement si l'API échoue
+                    const data = await fetchPopularProductsTemp();
+                    setProducts(data.products);
+                    console.log('📦 Produits populaires chargés depuis le fallback local');
+                }
 
             } catch (err) {
                 setError('Erreur lors du chargement des produits populaires');
