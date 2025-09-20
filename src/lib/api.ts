@@ -2,6 +2,11 @@
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const getApiBaseUrl = () => {
+    // En production/déploiement, utiliser directement Railway
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'production') {
+        return 'https://oboriciennebackend-production.up.railway.app/api';
+    }
+
     // En production/déploiement, utiliser la variable d'environnement
     if (process.env.NEXT_PUBLIC_API_URL) {
         return process.env.NEXT_PUBLIC_API_URL;
