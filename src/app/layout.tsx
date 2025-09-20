@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "O'Boricienne Burger - Restaurant Évreux",
-  description: 'Découvrez nos smash burgers artisanaux près du CFA d\'Évreux. Commandez en ligne et dégustez l\'art du burger street food.',
+  description: 'Découvrez nos smash burgers artisanaux près du Bâtiment CFA d\'Évreux. Commandez en ligne et dégustez l\'art du burger street food.',
 }
 
 export default function RootLayout({

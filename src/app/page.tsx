@@ -46,7 +46,7 @@ export default function HomePage() {
                 et révéler des saveurs intenses.
               </p>
               <p className="text-lg text-gray-600 mb-8">
-                Installés près du CFA d'Évreux, nous servons la communauté étudiante
+                Installés près du Bâtiment CFA d'Évreux, nous servons la communauté étudiante
                 et les professionnels de la zone industrielle avec passion et authenticité.
               </p>
 
@@ -145,7 +145,7 @@ export default function HomePage() {
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-yellow-600 mx-auto mb-6"></div>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Idéalement situés près du CFA d'Évreux, zone industrielle
+              Idéalement situés près du Bâtiment CFA d'Évreux, zone industrielle
             </p>
           </div>
 
@@ -226,7 +226,7 @@ export default function HomePage() {
               </div>
               <p className="text-gray-300 mb-4 max-w-md">
                 Le goût de la rue, l'art du burger.
-                Créations street art près du CFA d'Évreux.
+                Créations street art près du Bâtiment CFA d'Évreux.
               </p>
               <div className="flex space-x-4">
                 <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-red-700 transition-colors">

@@ -10,7 +10,7 @@ export default function HeroSection() {
         {
             title: "Le goût de la rue",
             subtitle: "L'art du burger",
-            description: "Découvrez nos créations smashées à la plancha, près du CFA d'Évreux",
+            description: "Découvrez nos créations smashées à la plancha, près du Bâtiment CFA d'Évreux",
             cta: "Voir le menu",
             background: "bg-gradient-to-br from-red-900 via-red-800 to-red-700"
         },

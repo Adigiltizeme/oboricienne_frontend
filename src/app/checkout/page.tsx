@@ -477,7 +477,7 @@ export default function CheckoutPage() {
                                         <div className="text-sm">
                                             <p className="font-medium text-blue-800 mb-1">Zones de livraison :</p>
                                             <ul className="text-blue-700 space-y-1">
-                                                <li>• <strong>Gratuit</strong> : CFA Évreux et centre-ville (27000)</li>
+                                                <li>• <strong>Gratuit</strong> : Bâtiment CFA Évreux et centre-ville (27000)</li>
                                                 <li>• <strong>1,50€</strong> : Zone industrielle (27930, 27950)</li>
                                                 <li>• <strong>3,00€</strong> : Périphérie d'Évreux</li>
                                             </ul>
@@ -507,7 +507,7 @@ export default function CheckoutPage() {
 
                             <div className="mt-3 text-sm text-gray-600">
                                 <p>🕒 <strong>Horaires d'ouverture :</strong> Tous les jours de 7h00 à 21h30</p>
-                                <p>📍 <strong>Adresse :</strong> Zone Industrielle d'Évreux, près du CFA</p>
+                                <p>📍 <strong>Adresse :</strong> Zone Industrielle, près du Bâtiment CFA d'Évreux</p>
                             </div>
                         </div>
 

@@ -61,7 +61,7 @@ export default function LocationMap({ className = "" }: LocationMapProps) {
             <div className="text-sm text-gray-600 leading-relaxed">
               967 Rue Jacquard<br />
               27000 Évreux<br />
-              <span className="text-xs text-gray-500">Zone Industrielle - Près du CFA</span>
+              <span className="text-xs text-gray-500">Zone Industrielle - Près du Bâtiment CFA</span>
             </div>
           </div>
         </div>

@@ -200,7 +200,7 @@ export default function Cart() {
 
                             {/* Info livraison */}
                             <div className="text-center text-sm text-gray-500">
-                                🚚 Livraison gratuite près du CFA • ⏱️ Préparation 15-20 min
+                                🚚 Livraison gratuite près du Bâtiment CFA • ⏱️ Préparation 15-20 min
                             </div>
                         </div>
                     </>
