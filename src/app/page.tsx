@@ -177,7 +177,7 @@ export default function HomePage() {
                     <div className="text-red-600 text-xl">⏰</div>
                     <div>
                       <div className="font-semibold">11h-14h - 18h-22h00</div>
-                      <div className="text-gray-600">7 jours sur 7</div>
+                      <div className="text-gray-600">Du Lundi au Vendredi</div>
                     </div>
                   </div>
                 </div>
@@ -259,7 +259,7 @@ export default function HomePage() {
                 <li>Zone Industrielle près du Bâtiment CFA</li>
                 <li>967 Rue Jacquard</li>
                 <li>27000 Évreux</li>
-                <li>contact@oboricienne-burger.fr</li>
+                <li>oboricienneburger@gmail.com</li>
               </ul>
             </div>
           </div>
