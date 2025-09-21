@@ -401,7 +401,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                                 {product.customizations.length > 2 && '...'}
                             </div>
                         </div>
-                    )} */}
+                        )} */}
 
                         {/* Sélection des variantes */}
                         {hasVariants && product.variants && (

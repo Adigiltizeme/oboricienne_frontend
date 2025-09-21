@@ -8,7 +8,7 @@ export default function OrderingAlert() {
     if (!isVisible) return null;
 
     return (
-        <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white fixed top-20 left-0 right-0 z-40">
+        <div className="bg-gradient-to-br from-blue-900 via-gray-800 to-blue-900 text-white fixed top-20 left-0 right-0 z-40">
             <div className="max-w-7xl mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 flex-1">

@@ -12,7 +12,7 @@ export default function HeroSection() {
             subtitle: "L'art du burger",
             description: "Découvrez nos créations smashées à la plancha, près du Bâtiment CFA d'Évreux",
             cta: "Voir le menu",
-            background: "bg-gradient-to-br from-red-900 via-red-800 to-red-700"
+            background: "bg-gradient-to-br from-gray-900 via-gray-800 to-red-900"
         },
         {
             title: "Smash Burgers",
