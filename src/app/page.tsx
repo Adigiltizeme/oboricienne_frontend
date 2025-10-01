@@ -207,6 +207,8 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Scroll indicator vers le haut de la page */}
       </section>
 
       {/* Footer */}

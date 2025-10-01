@@ -211,9 +211,9 @@ export default function Header() {
                         </button> */}
 
                         {/* Menu utilisateur */}
-                        {/* <UserMenu />
+                        <UserMenu />
 
-                        <a
+                        {/* <a
                             href="/menu"
                             className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
                         >
@@ -260,9 +260,9 @@ export default function Header() {
                                 ))}
                                 <div className="px-3 py-2 space-y-3">
                                     {/* Menu utilisateur mobile */}
-                                    {/* <div className="flex justify-center">
+                                    <div className="flex justify-center">
                                         <UserMenu />
-                                    </div> */}
+                                    </div>
 
                                     {/* Bouton panier mobile */}
                                     {/* <button

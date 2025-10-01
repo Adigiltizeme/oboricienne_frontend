@@ -2,27 +2,21 @@
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const getApiBaseUrl = () => {
+    // Toujours utiliser NEXT_PUBLIC_API_URL si définie
+    if (process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL;
+    }
+
     // Détecter si on est sur Vercel (production)
     if (typeof window !== 'undefined' && (
         window.location.hostname.includes('vercel.app') ||
-        window.location.hostname.includes('oboricienne') ||
-        !window.location.hostname.includes('localhost')
+        window.location.hostname.includes('oboricienne')
     )) {
         return 'https://oboriciennebackend-production.up.railway.app/api';
     }
 
-    // En développement local, utiliser la variable d'environnement
-    if (process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes('localhost')) {
-        return process.env.NEXT_PUBLIC_API_URL;
-    }
-
-    // Détecter si on est sur ngrok (pour tests mobiles)
-    if (typeof window !== 'undefined' && window.location.hostname.includes('ngrok')) {
-        return 'https://VOTRE-BACKEND-NGROK-URL.ngrok.app/api';
-    }
-
-    // En développement local, utiliser le proxy Next.js
-    return '/api';
+    // Par défaut en développement, pointer vers le backend local
+    return 'http://localhost:5000/api';
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -359,3 +353,86 @@ export const testApiConnection = async (): Promise<boolean> => {
         return false;
     }
 };
+
+// Export d'un objet API simple pour les requêtes axios-like
+const api = {
+    get: async (endpoint: string, config: any = {}) => {
+        const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const response = await fetchWithNgrokHeaders(url, {
+            method: 'GET',
+            ...config
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    },
+
+    post: async (endpoint: string, body: any, config: any = {}) => {
+        const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const response = await fetchWithNgrokHeaders(url, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            ...config
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    },
+
+    put: async (endpoint: string, body: any, config: any = {}) => {
+        const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const response = await fetchWithNgrokHeaders(url, {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            ...config
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    },
+
+    patch: async (endpoint: string, body: any, config: any = {}) => {
+        const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const response = await fetchWithNgrokHeaders(url, {
+            method: 'PATCH',
+            body: JSON.stringify(body),
+            ...config
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    },
+
+    delete: async (endpoint: string, config: any = {}) => {
+        const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const response = await fetchWithNgrokHeaders(url, {
+            method: 'DELETE',
+            ...config
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return { data };
+    }
+};
+
+export default api;

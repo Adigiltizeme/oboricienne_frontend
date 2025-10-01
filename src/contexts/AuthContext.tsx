@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import api from '@/lib/api';
 
 interface User {
     id: string;
@@ -9,6 +10,7 @@ interface User {
     lastName: string;
     loyaltyLevel: string;
     loyaltyPoints: number;
+    role?: string;
 }
 
 interface AuthState {
@@ -101,26 +103,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         try {
-            const response = await fetch('/api/auth/me', {
+            const response = await api.get('/auth/me', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success) {
-                    dispatch({
-                        type: 'AUTH_SUCCESS',
-                        payload: {
-                            user: data.user,
-                            token
-                        }
-                    });
-                } else {
-                    localStorage.removeItem('auth_token');
-                    dispatch({ type: 'AUTH_FAILURE' });
-                }
+            if (response.data.success) {
+                dispatch({
+                    type: 'AUTH_SUCCESS',
+                    payload: {
+                        user: response.data.user,
+                        token
+                    }
+                });
             } else {
                 localStorage.removeItem('auth_token');
                 dispatch({ type: 'AUTH_FAILURE' });
@@ -136,29 +132,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'AUTH_START' });
 
         try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
+            const response = await api.post('/auth/login', { email, password });
 
-            const data = await response.json();
-
-            if (data.success) {
-                localStorage.setItem('auth_token', data.token);
+            if (response.data.success) {
+                localStorage.setItem('auth_token', response.data.token);
                 dispatch({
                     type: 'AUTH_SUCCESS',
                     payload: {
-                        user: data.user,
-                        token: data.token
+                        user: response.data.user,
+                        token: response.data.token
                     }
                 });
-                return { success: true, message: data.message };
+                return { success: true, message: response.data.message };
             } else {
                 dispatch({ type: 'AUTH_FAILURE' });
-                return { success: false, message: data.message };
+                return { success: false, message: response.data.message };
             }
         } catch (error) {
             console.error('Erreur login:', error);
@@ -177,29 +165,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'AUTH_START' });
 
         try {
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userData)
-            });
+            const response = await api.post('/auth/register', userData);
 
-            const data = await response.json();
-
-            if (data.success) {
-                localStorage.setItem('auth_token', data.token);
+            if (response.data.success) {
+                localStorage.setItem('auth_token', response.data.token);
                 dispatch({
                     type: 'AUTH_SUCCESS',
                     payload: {
-                        user: data.user,
-                        token: data.token
+                        user: response.data.user,
+                        token: response.data.token
                     }
                 });
-                return { success: true, message: data.message };
+                return { success: true, message: response.data.message };
             } else {
                 dispatch({ type: 'AUTH_FAILURE' });
-                return { success: false, message: data.message };
+                return { success: false, message: response.data.message };
             }
         } catch (error) {
             console.error('Erreur register:', error);
@@ -231,5 +211,11 @@ export function useAuth() {
     if (!context) {
         throw new Error('useAuth doit être utilisé dans un AuthProvider');
     }
-    return context;
+    return {
+        ...context,
+        user: context.state.user,
+        token: context.state.token,
+        isLoading: context.state.isLoading,
+        isAuthenticated: context.state.isAuthenticated
+    };
 }

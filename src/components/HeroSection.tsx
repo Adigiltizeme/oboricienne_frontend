@@ -92,7 +92,10 @@ export default function HeroSection() {
 
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-red-500/25">
+                        <button
+                            className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-red-500/25"
+                            onClick={heroSlides[currentSlide].cta === "Voir le menu" ? () => window.location.href = '/menu' : () => window.location.href = '/menu/smash-burger'}
+                            >
                             {heroSlides[currentSlide].cta}
                         </button>
                         <button className="border-2 border-white text-white hover:bg-white hover:text-gray-900 font-bold py-4 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300">
@@ -136,8 +139,14 @@ export default function HeroSection() {
 
             {/* Scroll indicator */}
             <div className="absolute bottom-8 right-8 z-20 animate-bounce">
-                <div className="text-white text-2xl">↓</div>
-                <div className="text-white text-xs mt-1">Scroll</div>
+                <button
+                    onClick={() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })}
+                    className="flex flex-col items-center text-white/80 hover:text-white transition-colors"
+                    aria-label="Scroll down"
+                >
+                    <div className="text-white text-2xl">↓</div>
+                    <div className="text-white text-xs mt-1">Scroll</div>
+                </button>
             </div>
         </section>
         // <section className="relative min-h-screen flex items-center justify-center overflow-hidden">

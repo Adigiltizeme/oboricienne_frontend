@@ -199,6 +199,117 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }: Aut
                                             : 'bg-red-600 hover:bg-red-700'
                                         }`}
                                 >
+                                    {isLoading ? 'Connexion...' : 'Se connecter'}
+                                </button>
+
+                                {/* Avantages membre */}
+                                <div className="mt-4 p-4 bg-green-50 rounded-lg">
+                                    <h4 className="font-medium text-green-800 mb-2">🎁 Avantages membre :</h4>
+                                    <ul className="text-sm text-green-700 space-y-1">
+                                        <li>• 50 points de bienvenue offerts</li>
+                                        <li>• Programme de fidélité exclusif</li>
+                                        <li>• Commandes plus rapides</li>
+                                        <li>• Offres et promotions en avant-première</li>
+                                    </ul>
+                                </div>
+                            </form>
+                        )}
+
+                        {/* Formulaire d'inscription */}
+                        {activeTab === 'register' && (
+                            <form onSubmit={handleRegisterSubmit} className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Prénom
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={registerData.firstName}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, firstName: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Prénom"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Nom
+                                        </label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={registerData.lastName}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, lastName: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Nom"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Email
+                                    </label>
+                                    <input
+                                        type="email"
+                                        required
+                                        value={registerData.email}
+                                        onChange={(e) => setRegisterData(prev => ({ ...prev, email: e.target.value }))}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="votre@email.com"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Téléphone (optionnel)
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        value={registerData.phone}
+                                        onChange={(e) => setRegisterData(prev => ({ ...prev, phone: e.target.value }))}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="06 12 34 56 78"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Mot de passe
+                                    </label>
+                                    <input
+                                        type="password"
+                                        required
+                                        value={registerData.password}
+                                        onChange={(e) => setRegisterData(prev => ({ ...prev, password: e.target.value }))}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="Minimum 6 caractères"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Confirmer le mot de passe
+                                    </label>
+                                    <input
+                                        type="password"
+                                        required
+                                        value={registerData.confirmPassword}
+                                        onChange={(e) => setRegisterData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                        placeholder="Confirmez votre mot de passe"
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${isLoading
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-red-600 hover:bg-red-700'
+                                        }`}
+                                >
                                     {isLoading ? 'Inscription...' : 'Créer mon compte'}
                                 </button>
 
