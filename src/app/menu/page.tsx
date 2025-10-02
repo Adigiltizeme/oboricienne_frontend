@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { fetchProducts, fetchCategories, Product, Category, formatPrice, getImageUrl } from '../../lib/api';
 import { fetchProductsTemp, fetchCategoriesTemp, isUsingTempData } from '../../lib/temp-api';
 import Header from '../../components/Header';
-import { getCategoryEmoji } from '@/helpers/getCategoryEmoji';
 import { useCart } from '@/contexts/CartContext';
 import ProductCard from '@/components/ProductCard';
 import OrderingAlert from '@/components/OrderingAlert';

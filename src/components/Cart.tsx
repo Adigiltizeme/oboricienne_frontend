@@ -1,6 +1,6 @@
 'use client';
 
-import { getCategoryEmoji } from '@/helpers/getCategoryEmoji';
+import { getCategoryImage } from '@/helpers/getCategoryEmoji';
 import { useCart } from '../contexts/CartContext';
 import { formatPrice, getImageUrl } from '../lib/api';
 
@@ -66,9 +66,11 @@ export default function Cart() {
                                         {/* Image produit */}
                                         <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                                             {!item.product.imageUrl ? (
-                                                <div className="w-full h-full bg-gradient-to-br from-red-600 to-yellow-600 flex items-center justify-center">
-                                                    <span className="text-white text-2xl">{getCategoryEmoji(item.product.slug)}</span>
-                                                </div>
+                                                <img
+                                                    src={getCategoryImage(item.product.category?.slug || '')}
+                                                    alt={item.product.name}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             ) : (
                                                 <div
                                                     className="w-full h-full bg-cover bg-center"

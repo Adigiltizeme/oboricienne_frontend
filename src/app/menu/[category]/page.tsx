@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { fetchProductsByCategory, Product, formatPrice, getImageUrl, Category } from '../../../lib/api';
 import { fetchProductsByCategoryTemp, isUsingTempData } from '../../../lib/temp-api';
 import Header from '../../../components/Header';
-import { getCategoryEmoji, getCategoryName } from '@/helpers/getCategoryEmoji';
+import { getCategoryImage, getCategoryName } from '@/helpers/getCategoryEmoji';
 import { useCart } from '@/contexts/CartContext';
 import ProductCard from '@/components/ProductCard';
 import OrderingAlert from '@/components/OrderingAlert';
@@ -122,7 +122,13 @@ export default function CategoryPage() {
                     </nav>
 
                     <div className="text-center">
-                        <div className="text-8xl mb-6">{getCategoryEmoji(categorySlug)}</div>
+                        <div className="mb-6 flex justify-center">
+                            <img
+                                src={getCategoryImage(categorySlug)}
+                                alt={category.name}
+                                className="w-32 h-32 rounded-2xl object-cover ring-white/20"
+                            />
+                        </div>
                         <h1 className="text-4xl md:text-6xl font-black mb-4">
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-yellow-400">
                                 {category.name.toUpperCase()}
@@ -195,7 +201,13 @@ export default function CategoryPage() {
                 <div className="max-w-7xl mx-auto px-6">
                     {products.length === 0 ? (
                         <div className="text-center py-16">
-                            <div className="text-6xl mb-4">{getCategoryEmoji(categorySlug)}</div>
+                            <div className="mb-6 flex justify-center">
+                                <img
+                                    src={getCategoryImage(categorySlug)}
+                                    alt={category.name}
+                                    className="w-32 h-32 rounded-2xl object-cover"
+                                />
+                            </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-2">Aucun produit dans cette catégorie</h3>
                             <p className="text-gray-600 mb-6">
                                 Cette catégorie est temporairement vide
@@ -237,7 +249,13 @@ export default function CategoryPage() {
                                     onClick={() => router.push(`/menu/${slug}`)}
                                     className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                                 >
-                                    <div className="text-4xl mb-2">{getCategoryEmoji(slug)}</div>
+                                    <div className="mb-2 flex justify-center">
+                                        <img
+                                            src={getCategoryImage(slug)}
+                                            alt={getCategoryName(slug)}
+                                            className="w-16 h-16 rounded-lg object-cover"
+                                        />
+                                    </div>
                                     <div className="font-medium text-gray-900 text-center text-sm">
                                         {getCategoryName(slug)}
                                     </div>

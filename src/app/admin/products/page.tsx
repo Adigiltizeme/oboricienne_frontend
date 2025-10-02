@@ -49,18 +49,12 @@ export default function ProductsAdmin() {
     }
 
     loadData();
-  }, [user, router, filterCategory, filterAvailability]);
+  }, [user, router]);
 
   const loadData = async () => {
     try {
-      const params: any = {};
-      if (filterCategory) params.categoryId = filterCategory;
-      if (filterAvailability) params.isAvailable = filterAvailability;
-      if (searchTerm) params.search = searchTerm;
-
       const [productsRes, categoriesRes] = await Promise.all([
         api.get('/admin/products', {
-          params,
           headers: { Authorization: `Bearer ${token}` }
         }),
         api.get('/admin/categories', {
@@ -118,10 +112,21 @@ export default function ProductsAdmin() {
     }
   };
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    // Filtre par recherche
+    const matchesSearch = searchTerm === '' ||
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Filtre par catégorie
+    const matchesCategory = filterCategory === '' || product.categoryId === filterCategory;
+
+    // Filtre par disponibilité
+    const matchesAvailability = filterAvailability === '' ||
+      product.isAvailable.toString() === filterAvailability;
+
+    return matchesSearch && matchesCategory && matchesAvailability;
+  });
 
   if (loading) {
     return (
@@ -289,7 +294,7 @@ export default function ProductsAdmin() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          {product.price.toFixed(2)}€
+                          {Number(product.price).toFixed(2)}€
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

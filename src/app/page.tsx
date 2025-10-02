@@ -6,6 +6,7 @@ import LocationMap from '../components/LocationMap';
 import OrderingAlert from '../components/OrderingAlert';
 
 import { categories, products } from '../data/products';
+import { getCategoryImage } from '@/helpers/getCategoryEmoji';
 
 export default function HomePage() {
   return (
@@ -90,7 +91,13 @@ export default function HomePage() {
             {/* Image placeholder */}
             <div className="relative">
               <div className="bg-gradient-to-br from-red-600 to-yellow-600 rounded-2xl p-8 text-white text-center">
-                <div className="text-8xl mb-4">🍔</div>
+                <div className="text-8xl mb-4">
+                  <img
+                    src={getCategoryImage('smash-burger')}
+                    alt="Smash Burger"
+                    className="w-24 h-24 rounded-xl object-cover text-center mx-auto mb-4"
+                  />
+                </div>
                 <h3 className="text-2xl font-bold mb-2">Technique Smash</h3>
                 <p className="text-red-100">
                   La viande est écrasée sur la plancha brûlante pour créer
@@ -219,12 +226,17 @@ export default function HomePage() {
             {/* Brand */}
             <div className="md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="text-3xl">🍔</div>
-                <div className="text-2xl font-black">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-yellow-400">
-                    O'BORICIENNE BURGER
-                  </span>
-                </div>
+                <div className="text-3xl"></div>
+                <img
+                  src="/images/logo_obb.jpeg"
+                  alt="O'Boricienne Logo"
+                  className="w-12 h-10 rounded-full shadow-lg"
+                />
+              </div>
+              <div className="text-2xl font-black">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-yellow-400">
+                  O'BORICIENNE BURGER
+                </span>
               </div>
               <p className="text-gray-300 mb-4 max-w-md">
                 Le goût de la rue, l'art du burger.

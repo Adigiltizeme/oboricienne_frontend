@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Product, ProductVariant, formatPrice, getImageUrl } from '../lib/api';
 import { useCart } from '../contexts/CartContext';
 import ProductCustomizationModal from './ProductCustomizationModal';
-import { getCategoryEmoji } from '../helpers/getCategoryEmoji';
+import { getCategoryImage } from '../helpers/getCategoryEmoji';
 
 interface ProductCardProps {
     product: Product;
@@ -76,11 +76,17 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                     {/* Product Image */}
                     <div className="relative h-64 overflow-hidden">
                         {!getCurrentImageUrl() ? (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-600 to-yellow-600">
-                                <div className="text-white text-center p-4">
-                                    <div className="text-6xl mb-2">{getCategoryEmoji(product.category?.slug || '')}</div>
-                                    <div className="font-bold text-lg">{getCurrentName()}</div>
-                                    <div className="text-sm opacity-75">O'Boricienne</div>
+                            <div className="w-full h-full relative">
+                                <img
+                                    src={getCategoryImage(product.category?.slug || '')}
+                                    alt={getCurrentName()}
+                                    className="w-full h-full object-cover opacity-60"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-br from-red-600/80 to-yellow-600/80 flex items-center justify-center">
+                                    <div className="text-white text-center p-4">
+                                        <div className="font-bold text-lg">{getCurrentName()}</div>
+                                        <div className="text-sm opacity-75">O'Boricienne</div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -151,7 +157,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                                 </div> */}
 
                         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {product.shortDescription || product.description}
+                            {product.description || product.shortDescription}
                         </p>
 
                         {/* Badges améliorés */}
@@ -267,8 +273,12 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                     {/* Image */}
                     <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
                         {!getCurrentImageUrl() ? (
-                            <div className="w-full h-full bg-gradient-to-br from-red-600 to-yellow-600 flex items-center justify-center">
-                                <span className="text-white text-xl">{getCategoryEmoji(product.category?.slug || '')}</span>
+                            <div className="w-full h-full relative">
+                                <img
+                                    src={getCategoryImage(product.category?.slug || '')}
+                                    alt={getCurrentName()}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
                         ) : (
                             <div
@@ -315,11 +325,17 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                     {/* Image avec badges et prix */}
                     <div className="relative h-64 overflow-hidden">
                         {!getCurrentImageUrl() ? (
-                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-600 to-yellow-600">
-                                <div className="text-white text-center p-4">
-                                    <div className="text-6xl mb-2">{getCategoryEmoji(product.category?.slug || '')}</div>
-                                    <div className="font-bold text-lg">{getCurrentName()}</div>
-                                    <div className="text-sm opacity-75">O'Boricienne</div>
+                            <div className="w-full h-full relative">
+                                <img
+                                    src={getCategoryImage(product.category?.slug || '')}
+                                    alt={getCurrentName()}
+                                    className="w-full h-full object-cover opacity-60"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-br from-red-600/80 to-yellow-600/80 flex items-center justify-center">
+                                    <div className="text-white text-center p-4">
+                                        <div className="font-bold text-lg">{getCurrentName()}</div>
+                                        <div className="text-sm opacity-75">O'Boricienne</div>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -380,7 +396,7 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
                         </div>
 
                         <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                            {product.shortDescription || product.description}
+                            {product.description || product.shortDescription}
                         </p>
 
                         {/* Catégorie et badges */}

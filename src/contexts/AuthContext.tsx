@@ -58,7 +58,10 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
             };
 
         case 'LOGOUT':
-            return initialState;
+            return {
+                ...initialState,
+                isLoading: false
+            };
 
         case 'UPDATE_USER':
             return {
@@ -102,6 +105,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return;
         }
 
+        // Vérifier le cache de session (5 minutes)
+        const cachedUser = sessionStorage.getItem('cached_user');
+        const cacheTime = sessionStorage.getItem('cache_time');
+
+        if (cachedUser && cacheTime) {
+            const now = Date.now();
+            const timeDiff = now - parseInt(cacheTime);
+
+            // Si le cache a moins de 5 minutes, l'utiliser
+            if (timeDiff < 5 * 60 * 1000) {
+                dispatch({
+                    type: 'AUTH_SUCCESS',
+                    payload: {
+                        user: JSON.parse(cachedUser),
+                        token
+                    }
+                });
+                return;
+            }
+        }
+
         try {
             const response = await api.get('/auth/me', {
                 headers: {
@@ -110,6 +134,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             });
 
             if (response.data.success) {
+                // Mettre en cache l'utilisateur
+                sessionStorage.setItem('cached_user', JSON.stringify(response.data.user));
+                sessionStorage.setItem('cache_time', Date.now().toString());
+
                 dispatch({
                     type: 'AUTH_SUCCESS',
                     payload: {
@@ -119,11 +147,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 });
             } else {
                 localStorage.removeItem('auth_token');
+                sessionStorage.removeItem('cached_user');
+                sessionStorage.removeItem('cache_time');
                 dispatch({ type: 'AUTH_FAILURE' });
             }
         } catch (error) {
             console.error('Erreur vérification auth:', error);
             localStorage.removeItem('auth_token');
+            sessionStorage.removeItem('cached_user');
+            sessionStorage.removeItem('cache_time');
             dispatch({ type: 'AUTH_FAILURE' });
         }
     };
@@ -190,6 +222,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = () => {
         localStorage.removeItem('auth_token');
+        sessionStorage.removeItem('cached_user');
+        sessionStorage.removeItem('cache_time');
         dispatch({ type: 'LOGOUT' });
     };
 

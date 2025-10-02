@@ -21,9 +21,6 @@ const getApiBaseUrl = () => {
 
 const API_BASE_URL = getApiBaseUrl();
 
-// Ajouter ce debug pour voir quelle URL est utilisée
-console.log('🔗 API_BASE_URL:', API_BASE_URL);
-
 // Types pour les réponses API
 export interface ApiResponse<T> {
     success: boolean;
@@ -112,26 +109,30 @@ const defaultHeaders = {
 
 // Fonction helper pour fetch avec headers ngrok
 const fetchWithNgrokHeaders = async (url: string, options: RequestInit = {}) => {
+    // Commencer avec les headers par défaut
+    const headers: Record<string, string> = { ...defaultHeaders };
+
+    // Ne pas définir Content-Type pour FormData (le navigateur le fait automatiquement avec boundary)
+    if (options.body instanceof FormData) {
+        delete headers['Content-Type'];
+    }
+
+    // Ajouter les headers personnalisés en dernier
+    Object.assign(headers, options.headers || {});
+
     return fetch(url, {
         ...options,
-        headers: {
-            ...defaultHeaders,
-            ...options.headers
-        }
+        headers
     });
 };
 
 // Récupérer tous les produits
 export const fetchProducts = async (): Promise<ProductsResponse> => {
     try {
-        console.log('🔗 Fetching products from:', `${API_BASE_URL}/products`);
         const response = await fetchWithNgrokHeaders(`${API_BASE_URL}/products`, {
             method: 'GET',
-            cache: 'no-store',
+            next: { revalidate: 60 }, // Cache 60 secondes
         });
-
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error(`Erreur API: ${response.status}`);
@@ -156,14 +157,10 @@ export const fetchProducts = async (): Promise<ProductsResponse> => {
 // Récupérer les produits populaires
 export const fetchPopularProducts = async (): Promise<ProductsResponse> => {
     try {
-        console.log('🔗 Fetching popular products from:', `${API_BASE_URL}/products/popular/list`);
         const response = await fetchWithNgrokHeaders(`${API_BASE_URL}/products/popular/list`, {
             method: 'GET',
-            cache: 'no-store',
+            next: { revalidate: 60 }, // Cache 60 secondes
         });
-
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error(`Erreur API: ${response.status}`);
@@ -188,14 +185,10 @@ export const fetchPopularProducts = async (): Promise<ProductsResponse> => {
 // Récupérer toutes les catégories
 export const fetchCategories = async (): Promise<CategoriesResponse> => {
     try {
-        console.log('🔗 Fetching categories from:', `${API_BASE_URL}/categories`);
         const response = await fetchWithNgrokHeaders(`${API_BASE_URL}/categories`, {
             method: 'GET',
-            cache: 'no-store',
+            next: { revalidate: 120 }, // Cache 2 minutes (les catégories changent rarement)
         });
-
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error(`Erreur API: ${response.status}`);
@@ -220,14 +213,10 @@ export const fetchCategories = async (): Promise<CategoriesResponse> => {
 // Récupérer les produits d'une catégorie
 export const fetchProductsByCategory = async (categorySlug: string): Promise<ProductsResponse> => {
     try {
-        console.log('🔗 Fetching products for category:', categorySlug);
         const response = await fetchWithNgrokHeaders(`${API_BASE_URL}/products/category/${categorySlug}`, {
             method: 'GET',
-            cache: 'no-store',
+            next: { revalidate: 60 }, // Cache 60 secondes
         });
-
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error(`Erreur API: ${response.status}`);
@@ -252,14 +241,10 @@ export const fetchProductsByCategory = async (categorySlug: string): Promise<Pro
 // Récupérer un produit par slug
 export const fetchProductBySlug = async (productSlug: string): Promise<{ success: boolean; product: Product }> => {
     try {
-        console.log('🔗 Fetching product by slug:', productSlug);
         const response = await fetchWithNgrokHeaders(`${API_BASE_URL}/products/${productSlug}`, {
             method: 'GET',
-            cache: 'no-store',
+            next: { revalidate: 60 }, // Cache 60 secondes
         });
-
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error(`Erreur API: ${response.status}`);
@@ -315,13 +300,7 @@ export const getImageUrl = (imageUrl: string | null, productName?: string): stri
     const encodedParts = pathParts.map(part =>
         part === '' ? '' : encodeURIComponent(part)
     );
-    const encodedUrl = encodedParts.join('/');
-
-    // Debug: log des URLs d'images pour vérification
-    console.log('🖼️ Image URL original:', cleanUrl);
-    console.log('🖼️ Image URL encodée:', encodedUrl);
-
-    return encodedUrl;
+    return encodedParts.join('/');
 };
 
 // Fonction pour obtenir l'emoji correspondant au produit
@@ -373,9 +352,11 @@ const api = {
 
     post: async (endpoint: string, body: any, config: any = {}) => {
         const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+        const isFormData = body instanceof FormData;
+
         const response = await fetchWithNgrokHeaders(url, {
             method: 'POST',
-            body: JSON.stringify(body),
+            body: isFormData ? body : JSON.stringify(body),
             ...config
         });
 

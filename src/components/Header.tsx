@@ -5,7 +5,7 @@ import { useCart } from '../contexts/CartContext';
 import UserMenu from './UserMenu';
 import { fetchCategoriesTemp, fetchProductsTemp, isUsingTempData } from '../lib/temp-api';
 import { fetchCategories, fetchProducts, Category } from '../lib/api';
-import { getCategoryEmoji } from '../helpers/getCategoryEmoji';
+import { getCategoryImage } from '../helpers/getCategoryEmoji';
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -24,10 +24,20 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Charger les données pour le menu déroulant
+    // Charger les données pour le menu déroulant (avec cache sessionStorage)
     useEffect(() => {
         const loadMenuData = async () => {
             try {
+                // Vérifier d'abord le cache sessionStorage
+                const cachedCategories = sessionStorage.getItem('header_categories');
+                const cachedProductsCount = sessionStorage.getItem('header_products_count');
+
+                if (cachedCategories && cachedProductsCount) {
+                    setCategories(JSON.parse(cachedCategories));
+                    setTotalProducts(parseInt(cachedProductsCount));
+                    return;
+                }
+
                 // Essayer d'abord l'API réelle
                 if (!isUsingTempData()) {
                     try {
@@ -37,10 +47,13 @@ export default function Header() {
                         ]);
                         setCategories(categoriesData.categories);
                         setTotalProducts(productsData.products.length);
-                        console.log('✅ Données chargées depuis l\'API Railway');
+
+                        // Mettre en cache pour cette session
+                        sessionStorage.setItem('header_categories', JSON.stringify(categoriesData.categories));
+                        sessionStorage.setItem('header_products_count', productsData.products.length.toString());
                         return;
                     } catch (apiError) {
-                        console.warn('⚠️ API Railway échoué, fallback vers données locales:', apiError);
+                        console.warn('⚠️ API Railway échoué, fallback vers données locales');
                     }
                 }
 
@@ -51,7 +64,6 @@ export default function Header() {
                 ]);
                 setCategories(categoriesData.categories);
                 setTotalProducts(productsData.products.length);
-                console.log('📦 Données chargées depuis le fallback local');
 
             } catch (err) {
                 console.error('❌ Erreur fatale chargement menu Header:', err);
@@ -148,7 +160,11 @@ export default function Header() {
                                                 href={`/menu/${category.slug}`}
                                                 className="flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors group"
                                             >
-                                                <span className="text-xl">{getCategoryEmoji(category.slug)}</span>
+                                                <img
+                                                    src={getCategoryImage(category.slug)}
+                                                    alt={category.name}
+                                                    className="w-12 h-12 rounded-lg object-cover"
+                                                />
                                                 <div className="flex-1">
                                                     <div className="font-medium">{category.name}</div>
                                                     <div className="text-xs text-gray-500">{category.description}</div>

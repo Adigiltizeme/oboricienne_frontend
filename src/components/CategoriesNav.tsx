@@ -4,29 +4,12 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchCategories, Category } from '../lib/api';
 import { fetchCategoriesTemp, isUsingTempData } from '../lib/temp-api';
+import { getCategoryImage } from '../helpers/getCategoryEmoji';
 
 export default function CategoriesNav() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-
-    // Icons pour chaque catégorie
-    const categoryIcons: { [key: string]: string } = {
-        'burgers': '🍔',
-        'smash-burger': '🔥',
-        'sandwichs': '🥪',
-        'tacos': '🌮',
-        'brasserie': '🍽️',
-        'salades': '🥗',
-        'menu-tenders': '🍗',
-        'duo': '👥',
-        // Anciens mappings pour compatibilité
-        'smash-burgers': '🔥',
-        'classiques': '🍔',
-        'pizzas': '🍕',
-        'boissons': '🥤',
-        'desserts': '🍰'
-    };
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -109,9 +92,13 @@ export default function CategoriesNav() {
                             onClick={() => router.push(`/menu/${category.slug}`)}
                         >
 
-                            {/* Category Icon */}
-                            <div className="text-6xl text-gray-400 mb-4 transform group-hover:scale-110 transition-transform duration-300">
-                                {categoryIcons[category.slug] || '🍴'}
+                            {/* Category Image */}
+                            <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                                <img
+                                    src={getCategoryImage(category.slug)}
+                                    alt={category.name}
+                                    className="w-24 h-24 rounded-xl object-cover transition-shadow"
+                                />
                             </div>
 
                             {/* Category Info */}
