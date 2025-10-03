@@ -26,7 +26,32 @@ export default function ProductCard({ product, variant = 'default' }: ProductCar
 
     // Fonctions helper pour obtenir prix et image actuels
     const getCurrentPrice = () => selectedVariant ? selectedVariant.price : product.price;
-    const getCurrentImageUrl = () => selectedVariant ? selectedVariant.imageUrl : product.imageUrl;
+    const getCurrentImageUrl = () => {
+        if (!selectedVariant) return product.imageUrl;
+
+        // Si c'est un variant "Menu", on modifie l'URL de l'image pour pointer vers l'image du menu
+        if (selectedVariant.name.includes('Menu')) {
+            const imageUrl = selectedVariant.imageUrl || product.imageUrl;
+
+            // Cas spécial : OB180 qui utilise une URL générique "dat6hjazm4iuzsdvse4u.png"
+            if (imageUrl && typeof imageUrl === 'string' && imageUrl.includes('dat6hjazm4iuzsdvse4u.png')) {
+                return 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314844/oboricienne/products/burgers/180-obb-menu.png';
+            }
+
+            // Remplacer "-seul" par "-menu" dans l'URL pour les autres produits
+            return (imageUrl ?? '').replace(/-seul\.(png|jpg|jpeg|webp)/i, '-menu.$1');
+        }
+
+        // Si c'est un variant "Seul" et que c'est le OB180, utiliser l'image correcte
+        if (selectedVariant.name.includes('Seul')) {
+            const imageUrl = selectedVariant.imageUrl || product.imageUrl;
+            if (imageUrl && typeof imageUrl === 'string' && imageUrl.includes('dat6hjazm4iuzsdvse4u.png')) {
+                return 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314845/oboricienne/products/burgers/180-obb-seul.png';
+            }
+        }
+
+        return selectedVariant.imageUrl;
+    };
     const getCurrentName = () => selectedVariant ? selectedVariant.name : product.name;
 
     // 🛡️ Vérification de sécurité

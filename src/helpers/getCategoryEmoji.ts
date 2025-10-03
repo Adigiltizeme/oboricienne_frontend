@@ -23,8 +23,8 @@ export const getCategoryEmoji = (slug: string) => {
 export const getCategoryImage = (slug: string): string => {
     const imageMap: { [key: string]: string } = {
         // Images Cloudinary représentatives par catégorie (URLs réelles depuis la BDD)
-        'burgers': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1759432768/oboricienne/products/dat6hjazm4iuzsdvse4u.png', // OB180
-        'smash-burger': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314908/oboricienne/products/smash%20burger/BOURSINE-seul.png', // Smash Boursine
+        'burgers': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314867/oboricienne/products/burgers/Kim-obb-seul.png', // Kim OBB
+        'smash-burger': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314911/oboricienne/products/smash%20burger/BUFF-OBB-seul.png', // Smash Buff
         'sandwichs': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314890/oboricienne/products/sandwichs/classic-obb-seul.png', // Classic OBB
         'tacos': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314922/oboricienne/products/tacos/tacos-1-viande-seul.png', // Tacos 1 viande
         'brasserie': 'https://res.cloudinary.com/dpxqbfxqq/image/upload/v1758314839/oboricienne/products/brasserie/escalope-normande.png', // Escalope Normande
