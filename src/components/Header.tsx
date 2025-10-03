@@ -110,6 +110,7 @@ export default function Header() {
                         <a
                             href="/"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
+                            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
                         >
                             Accueil
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>
@@ -120,6 +121,7 @@ export default function Header() {
                             <a
                                 href="/menu"
                                 className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group flex items-center space-x-1"
+                                style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
                             >
                                 <span>Menu</span>
                                 <svg className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,6 +189,7 @@ export default function Header() {
                         <a
                             href="#hits"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
+                            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
                         >
                             Nos Hits
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>
@@ -195,6 +198,7 @@ export default function Header() {
                         <a
                             href="#histoire"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
+                            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
                         >
                             Histoire (Bientôt disponible)
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>
@@ -203,6 +207,7 @@ export default function Header() {
                         <a
                             href="#contact"
                             className="text-white hover:text-yellow-400 font-medium transition-colors duration-300 relative group"
+                            style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
                         >
                             Contact (Bientôt disponible)
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 group-hover:w-full transition-all duration-300"></span>

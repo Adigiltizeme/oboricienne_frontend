@@ -94,261 +94,263 @@ export default function AuthModal({ isOpen, onClose, defaultTab = 'login' }: Aut
         <>
             {/* Overlay */}
             <div
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]"
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
+                <div className="pointer-events-auto">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
 
-                    {/* Header */}
-                    <div className="p-6 border-b border-gray-200">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl font-bold text-gray-900">
-                                {activeTab === 'login' ? '🔑 Connexion' : '✨ Inscription'}
-                            </h2>
-                            <button
-                                onClick={onClose}
-                                className="text-gray-400 hover:text-gray-600 transition-colors"
-                            >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
+                        {/* Header */}
+                        <div className="p-6 border-b border-gray-200">
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-2xl font-bold text-gray-900">
+                                    {activeTab === 'login' ? '🔑 Connexion' : '✨ Inscription'}
+                                </h2>
+                                <button
+                                    onClick={onClose}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
 
-                        {/* Tabs */}
-                        <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
-                            <button
-                                onClick={() => setActiveTab('login')}
-                                className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${activeTab === 'login'
+                            {/* Tabs */}
+                            <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+                                <button
+                                    onClick={() => setActiveTab('login')}
+                                    className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${activeTab === 'login'
                                         ? 'bg-white text-red-600 shadow-sm'
                                         : 'text-gray-600 hover:text-gray-900'
-                                    }`}
-                            >
-                                Connexion
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('register')}
-                                className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${activeTab === 'register'
+                                        }`}
+                                >
+                                    Connexion
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('register')}
+                                    className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${activeTab === 'register'
                                         ? 'bg-white text-red-600 shadow-sm'
                                         : 'text-gray-600 hover:text-gray-900'
-                                    }`}
-                            >
-                                Inscription
-                            </button>
+                                        }`}
+                                >
+                                    Inscription
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Content */}
-                    <div className="p-6">
+                        {/* Content */}
+                        <div className="p-6">
 
-                        {/* Message */}
-                        {message && (
-                            <div className={`mb-4 p-4 rounded-lg ${message.type === 'success'
+                            {/* Message */}
+                            {message && (
+                                <div className={`mb-4 p-4 rounded-lg ${message.type === 'success'
                                     ? 'bg-green-50 text-green-800 border border-green-200'
                                     : 'bg-red-50 text-red-800 border border-red-200'
-                                }`}>
-                                <div className="flex items-center">
-                                    <span className="mr-2">
-                                        {message.type === 'success' ? '✅' : '⚠️'}
-                                    </span>
-                                    {message.text}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Formulaire de connexion */}
-                        {activeTab === 'login' && (
-                            <form onSubmit={handleLoginSubmit} className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={loginData.email}
-                                        onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="votre@email.com"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Mot de passe
-                                    </label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={loginData.password}
-                                        onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Votre mot de passe"
-                                    />
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${isLoading
-                                            ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-red-600 hover:bg-red-700'
-                                        }`}
-                                >
-                                    {isLoading ? 'Connexion...' : 'Se connecter'}
-                                </button>
-
-                                {/* Avantages membre */}
-                                <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                                    <h4 className="font-medium text-green-800 mb-2">🎁 Avantages membre :</h4>
-                                    <ul className="text-sm text-green-700 space-y-1">
-                                        <li>• 50 points de bienvenue offerts</li>
-                                        <li>• Programme de fidélité exclusif</li>
-                                        <li>• Commandes plus rapides</li>
-                                        <li>• Offres et promotions en avant-première</li>
-                                    </ul>
-                                </div>
-                            </form>
-                        )}
-
-                        {/* Formulaire d'inscription */}
-                        {activeTab === 'register' && (
-                            <form onSubmit={handleRegisterSubmit} className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Prénom
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={registerData.firstName}
-                                            onChange={(e) => setRegisterData(prev => ({ ...prev, firstName: e.target.value }))}
-                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                            placeholder="Prénom"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                                            Nom
-                                        </label>
-                                        <input
-                                            type="text"
-                                            required
-                                            value={registerData.lastName}
-                                            onChange={(e) => setRegisterData(prev => ({ ...prev, lastName: e.target.value }))}
-                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                            placeholder="Nom"
-                                        />
+                                    }`}>
+                                    <div className="flex items-center">
+                                        <span className="mr-2">
+                                            {message.type === 'success' ? '✅' : '⚠️'}
+                                        </span>
+                                        {message.text}
                                     </div>
                                 </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        required
-                                        value={registerData.email}
-                                        onChange={(e) => setRegisterData(prev => ({ ...prev, email: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="votre@email.com"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Téléphone (optionnel)
-                                    </label>
-                                    <input
-                                        type="tel"
-                                        value={registerData.phone}
-                                        onChange={(e) => setRegisterData(prev => ({ ...prev, phone: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="06 12 34 56 78"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Mot de passe
-                                    </label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={registerData.password}
-                                        onChange={(e) => setRegisterData(prev => ({ ...prev, password: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Minimum 6 caractères"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Confirmer le mot de passe
-                                    </label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={registerData.confirmPassword}
-                                        onChange={(e) => setRegisterData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Confirmez votre mot de passe"
-                                    />
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${isLoading
-                                            ? 'bg-gray-400 cursor-not-allowed'
-                                            : 'bg-red-600 hover:bg-red-700'
-                                        }`}
-                                >
-                                    {isLoading ? 'Inscription...' : 'Créer mon compte'}
-                                </button>
-
-                                {/* Avantages inscription */}
-                                <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                                    <h4 className="font-medium text-green-800 mb-2">🎁 Avantages membre :</h4>
-                                    <ul className="text-sm text-green-700 space-y-1">
-                                        <li>• 50 points de bienvenue offerts</li>
-                                        <li>• Programme de fidélité exclusif</li>
-                                        <li>• Commandes plus rapides</li>
-                                        <li>• Offres et promotions en avant-première</li>
-                                    </ul>
-                                </div>
-                            </form>
-                        )}
-
-                        {/* Footer */}
-                        <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
-                            {activeTab === 'login' ? (
-                                <p>
-                                    Pas encore de compte ?{' '}
-                                    <button
-                                        onClick={() => setActiveTab('register')}
-                                        className="text-red-600 hover:text-red-700 font-medium"
-                                    >
-                                        Inscrivez-vous gratuitement
-                                    </button>
-                                </p>
-                            ) : (
-                                <p>
-                                    Déjà un compte ?{' '}
-                                    <button
-                                        onClick={() => setActiveTab('login')}
-                                        className="text-red-600 hover:text-red-700 font-medium"
-                                    >
-                                        Connectez-vous
-                                    </button>
-                                </p>
                             )}
+
+                            {/* Formulaire de connexion */}
+                            {activeTab === 'login' && (
+                                <form onSubmit={handleLoginSubmit} className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={loginData.email}
+                                            onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="votre@email.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Mot de passe
+                                        </label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={loginData.password}
+                                            onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Votre mot de passe"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${isLoading
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-red-600 hover:bg-red-700'
+                                            }`}
+                                    >
+                                        {isLoading ? 'Connexion...' : 'Se connecter'}
+                                    </button>
+
+                                    {/* Avantages membre */}
+                                    <div className="mt-4 p-4 bg-green-50 rounded-lg">
+                                        <h4 className="font-medium text-green-800 mb-2">🎁 Avantages membre :</h4>
+                                        <ul className="text-sm text-green-700 space-y-1">
+                                            <li>• 50 points de bienvenue offerts</li>
+                                            <li>• Programme de fidélité exclusif</li>
+                                            <li>• Commandes plus rapides</li>
+                                            <li>• Offres et promotions en avant-première</li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            )}
+
+                            {/* Formulaire d'inscription */}
+                            {activeTab === 'register' && (
+                                <form onSubmit={handleRegisterSubmit} className="space-y-4">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Prénom
+                                            </label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={registerData.firstName}
+                                                onChange={(e) => setRegisterData(prev => ({ ...prev, firstName: e.target.value }))}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                                placeholder="Prénom"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Nom
+                                            </label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={registerData.lastName}
+                                                onChange={(e) => setRegisterData(prev => ({ ...prev, lastName: e.target.value }))}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                                placeholder="Nom"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={registerData.email}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, email: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="votre@email.com"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Téléphone (optionnel)
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            value={registerData.phone}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, phone: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="06 12 34 56 78"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Mot de passe
+                                        </label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={registerData.password}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, password: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Minimum 6 caractères"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Confirmer le mot de passe
+                                        </label>
+                                        <input
+                                            type="password"
+                                            required
+                                            value={registerData.confirmPassword}
+                                            onChange={(e) => setRegisterData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Confirmez votre mot de passe"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className={`w-full py-3 px-4 rounded-lg font-medium text-white transition-colors ${isLoading
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-red-600 hover:bg-red-700'
+                                            }`}
+                                    >
+                                        {isLoading ? 'Inscription...' : 'Créer mon compte'}
+                                    </button>
+
+                                    {/* Avantages inscription */}
+                                    <div className="mt-4 p-4 bg-green-50 rounded-lg">
+                                        <h4 className="font-medium text-green-800 mb-2">🎁 Avantages membre :</h4>
+                                        <ul className="text-sm text-green-700 space-y-1">
+                                            <li>• 50 points de bienvenue offerts</li>
+                                            <li>• Programme de fidélité exclusif</li>
+                                            <li>• Commandes plus rapides</li>
+                                            <li>• Offres et promotions en avant-première</li>
+                                        </ul>
+                                    </div>
+                                </form>
+                            )}
+
+                            {/* Footer */}
+                            <div className="mt-6 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
+                                {activeTab === 'login' ? (
+                                    <p>
+                                        Pas encore de compte ?{' '}
+                                        <button
+                                            onClick={() => setActiveTab('register')}
+                                            className="text-red-600 hover:text-red-700 font-medium"
+                                        >
+                                            Inscrivez-vous gratuitement
+                                        </button>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        Déjà un compte ?{' '}
+                                        <button
+                                            onClick={() => setActiveTab('login')}
+                                            className="text-red-600 hover:text-red-700 font-medium"
+                                        >
+                                            Connectez-vous
+                                        </button>
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
