@@ -150,7 +150,7 @@ export default function MenuPage() {
                     </h1>
                     <div className="w-24 h-1 bg-gradient-to-r from-red-400 to-yellow-400 mx-auto mb-6"></div>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-                        Créations street art pour tous les goûts. L'art du burger de rue, sans compromis !
+                        Créations street art pour tous les goûts. L'art du burger, sans compromis !
                     </p>
 
                     {/* Stats rapides */}

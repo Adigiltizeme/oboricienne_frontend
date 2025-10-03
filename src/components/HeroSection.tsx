@@ -8,8 +8,8 @@ export default function HeroSection() {
 
     const heroSlides = [
         {
-            title: "Le goût de la rue",
-            subtitle: "L'art du burger",
+            title: "L'art du burger",
+            subtitle: "Dans toute sa Splend-Eure",
             description: "Découvrez nos créations smashées à la plancha, près du Bâtiment CFA d'Évreux",
             cta: "Voir le menu",
             background: "bg-gradient-to-br from-gray-900 via-gray-800 to-red-900"
@@ -17,7 +17,7 @@ export default function HeroSection() {
         {
             title: "Smash Burgers",
             subtitle: "Technique authentique",
-            description: "L'âme de la rue en un burger - Nos créations smashées pour une explosion de saveurs",
+            description: "L'âme du délice en un burger - Nos créations smashées pour une explosion de saveurs",
             cta: "Nos Smash",
             background: "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700"
         },

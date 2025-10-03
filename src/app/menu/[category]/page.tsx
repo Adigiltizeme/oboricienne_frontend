@@ -272,7 +272,7 @@ export default function CategoryPage() {
                         Prêt à goûter nos {category.name.toLowerCase()} ?
                     </h2>
                     <p className="text-gray-300 mb-8">
-                        Commandez maintenant et savourez l'art du burger de rue en 15 minutes !
+                        Commandez maintenant et savourez l'art du burger en 15 minutes !
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-colors">

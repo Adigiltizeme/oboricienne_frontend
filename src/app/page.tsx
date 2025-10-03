@@ -38,7 +38,7 @@ export default function HomePage() {
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-yellow-600">
                   L'ART DU BURGER
                 </span>
-                <br />DE RUE
+                <br />DANS TOUTE SA SPLEND-EURE
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-red-600 to-yellow-600 mb-6"></div>
               <p className="text-xl text-gray-600 mb-6 leading-relaxed">
@@ -239,7 +239,7 @@ export default function HomePage() {
                 </span>
               </div>
               <p className="text-gray-300 mb-4 max-w-md">
-                Le goût de la rue, l'art du burger.
+                L'art du burger, dans toute sa Splend-Eure
                 Créations street art près du Bâtiment CFA d'Évreux.
               </p>
               <div className="flex space-x-4">
