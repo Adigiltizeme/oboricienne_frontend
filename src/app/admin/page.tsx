@@ -242,9 +242,9 @@ export default function AdminDashboard() {
                   </div>
                 </Link>
 
-                <Link
-                  href="/admin/categories"
-                  className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                <div
+                  className="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-50 cursor-not-allowed"
+                  title="Fonctionnalité à venir"
                 >
                   <div className="flex-shrink-0">
                     <div className="bg-purple-100 p-3 rounded-full">
@@ -255,13 +255,13 @@ export default function AdminDashboard() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-sm font-medium text-gray-900">Gérer les Catégories</h3>
-                    <p className="text-sm text-gray-500">Organiser vos produits</p>
+                    <p className="text-sm text-gray-500">Bientôt disponible</p>
                   </div>
-                </Link>
+                </div>
 
-                <Link
-                  href="/admin/stock"
-                  className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                <div
+                  className="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-50 cursor-not-allowed"
+                  title="Fonctionnalité à venir"
                 >
                   <div className="flex-shrink-0">
                     <div className="bg-yellow-100 p-3 rounded-full">
@@ -272,9 +272,9 @@ export default function AdminDashboard() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-sm font-medium text-gray-900">Gérer le Stock</h3>
-                    <p className="text-sm text-gray-500">Suivre les disponibilités</p>
+                    <p className="text-sm text-gray-500">Bientôt disponible</p>
                   </div>
-                </Link>
+                </div>
               </div>
             </div>
           </div>
